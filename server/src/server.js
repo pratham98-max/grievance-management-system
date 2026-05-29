@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import { connectDB } from './config/db.js';
 import './config/firebase.js';
 import authRoutes from './routes/authRoutes.js';
+import ticketRoutes from './routes/ticketRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(cors({
 app.use(express.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Log HTTP requests
 app.use('/api/auth', authRoutes);
+app.use('/api/tickets', ticketRoutes);
 
 // Basic Health Check Route
 app.get('/api/health', (req, res) => {

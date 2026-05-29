@@ -1,0 +1,61 @@
+<div class="min-h-screen bg-brand-light font-sans text-gray-800 flex flex-col">
+  <header class="bg-brand-dark text-white px-6 py-4 shadow-md">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <span routerLink="/dashboard" class="text-xl font-bold tracking-wide cursor-pointer hover:text-brand-accent transition-colors">← Back to Dashboard</span>
+      <span class="text-sm opacity-70">NatureTek Grievance Lodgement</span>
+    </div>
+  </header>
+
+  <main class="max-w-4xl w-full mx-auto px-6 py-12 flex-grow">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div class="p-8 border-b border-gray-100 bg-gray-50/50">
+        <h1 class="text-2xl font-bold text-brand-dark">File a Technical or Billing Grievance</h1>
+        <p class="text-sm text-gray-500 mt-1">Provide accurate system details so our routing algorithm can assign the right engineering team.</p>
+      </div>
+
+      <form class="p-8 space-y-6" (ngSubmit)="onSubmit()">
+        
+        <div *ngIf="errorMessage" class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+          {{ errorMessage }}
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Issue Category *</label>
+            <select name="category" [(ngModel)]="category" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none bg-white transition-all">
+              <option value="" disabled selected>Select an infrastructure component</option>
+              <option value="Inverter Fault">Solar Inverter Fault</option>
+              <option value="Panel Damage">Panel Physical/Performance Damage</option>
+              <option value="Battery System">Energy Storage / Battery System</option>
+              <option value="Billing Discrepancy">Net Metering / Billing Discrepancy</option>
+              <option value="Other">Other Inquiry</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Solar Array ID (Optional)</label>
+            <input type="text" name="plantReference" [(ngModel)]="plantReference" placeholder="e.g., NT-ARRAY-XYZ-01" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none transition-all" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Brief Summary / Subject *</label>
+          <input type="text" name="subject" [(ngModel)]="subject" required placeholder="e.g., Inverter blinking orange light" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none transition-all" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Detailed Description *</label>
+          <textarea rows="5" name="description" [(ngModel)]="description" required placeholder="Describe what happened..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none transition-all resize-none"></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 flex justify-end gap-4">
+          <button type="button" routerLink="/dashboard" class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="isLoading" class="px-6 py-3 bg-brand-dark text-white font-bold rounded-lg hover:bg-[#13442a] transition-all shadow-md disabled:opacity-70">
+            {{ isLoading ? 'Submitting...' : 'Submit Ticket' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

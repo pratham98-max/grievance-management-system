@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LodgeComplaint } from './lodge-complaint.component';
+import { LodgeComplaintComponent } from './lodge-complaint.component';
 
 describe('LodgeComplaint', () => {
-  let component: LodgeComplaint;
-  let fixture: ComponentFixture<LodgeComplaint>;
+  let component: LodgeComplaintComponent;
+  let fixture: ComponentFixture<LodgeComplaintComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LodgeComplaint],
+      imports: [LodgeComplaintComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LodgeComplaint);
+    fixture = TestBed.createComponent(LodgeComplaintComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
