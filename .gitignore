@@ -1,4 +1,5 @@
 # .gitignore
+server/firebase-service-account.json
 
 # Node
 node_modules/
@@ -14,6 +15,7 @@ client/dist/
 server/.env
 client/src/environments/environment.ts
 client/src/environments/environment.development.ts
+
 
 # Editor & OS
 .vscode/
