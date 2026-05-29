@@ -1,0 +1,81 @@
+<div class="min-h-screen flex flex-col font-sans selection:bg-brand-accent selection:text-white">
+  
+  <nav class="bg-brand-dark text-white px-6 py-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <svg class="text-brand-accent h-8 w-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+        <span class="text-xl font-bold tracking-wide">NatureTek Solar</span>
+      </div>
+      <div class="hidden md:flex space-x-8 items-center font-medium">
+        <a href="#home" class="hover:text-brand-accent transition-colors">Home</a>
+        <a href="#track" class="hover:text-brand-accent transition-colors">Track Ticket</a>
+        <a href="#support" class="hover:text-brand-accent transition-colors">Support</a>
+      </div>
+      <div class="flex space-x-4">
+        <button routerLink="/login" class="px-5 py-2 text-brand-dark bg-white font-semibold rounded hover:bg-gray-100 transition-colors">
+          Login
+        </button>
+        <button routerLink="/register" class="px-5 py-2 bg-brand-accent text-white font-semibold rounded hover:bg-[#6ba038] transition-colors shadow-lg">
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-brand-light py-20 px-6 flex-grow" id="home">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark mb-6">
+        Dedicated Support for Your <br class="hidden md:block"/> Solar Infrastructure
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+        Welcome to the NatureTek Grievance Portal. Whether it is an inverter fault, panel maintenance, or billing inquiry, our specialists are here to resolve it swiftly.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <button class="flex items-center justify-center gap-2 px-8 py-4 bg-brand-dark text-white font-bold rounded-lg hover:bg-[#13442a] transition-all shadow-xl">
+          Register a Complaint
+        </button>
+        <button class="flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-brand-dark text-brand-dark font-bold rounded-lg hover:bg-gray-50 transition-all shadow-sm">
+          Track Existing Ticket
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="py-20 px-6 bg-white" id="support">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-brand-dark mb-4">How It Works</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Our streamlined process ensures that your solar energy systems experience minimal downtime.</p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="flex flex-col items-center text-center p-8 rounded-xl bg-brand-light border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white p-4 rounded-full shadow-sm mb-6 inline-block">
+             <span class="text-2xl font-bold text-brand-accent">1</span>
+          </div>
+          <h3 class="text-xl font-bold text-brand-dark mb-3">Lodge your Issue</h3>
+          <p class="text-gray-600 leading-relaxed">Submit a detailed ticket regarding your solar panels, inverter, or billing. Upload photos for faster resolution.</p>
+        </div>
+
+        <div class="flex flex-col items-center text-center p-8 rounded-xl bg-brand-light border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white p-4 rounded-full shadow-sm mb-6 inline-block">
+             <span class="text-2xl font-bold text-brand-accent">2</span>
+          </div>
+          <h3 class="text-xl font-bold text-brand-dark mb-3">We Assign a Specialist</h3>
+          <p class="text-gray-600 leading-relaxed">Our intelligent system immediately routes your grievance to the correct NatureTek department and assigns an expert.</p>
+        </div>
+
+        <div class="flex flex-col items-center text-center p-8 rounded-xl bg-brand-light border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white p-4 rounded-full shadow-sm mb-6 inline-block">
+            <span class="text-2xl font-bold text-brand-accent">3</span>
+          </div>
+          <h3 class="text-xl font-bold text-brand-dark mb-3">Track till Resolution</h3>
+          <p class="text-gray-600 leading-relaxed">Receive real-time updates and track the status of your ticket from 'Pending' to 'Resolved' directly on your dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>

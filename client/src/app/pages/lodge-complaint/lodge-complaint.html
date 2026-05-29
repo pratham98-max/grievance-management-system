@@ -1,0 +1,64 @@
+<div class="min-h-screen bg-brand-light font-sans text-gray-800 flex flex-col">
+  <header class="bg-brand-dark text-white px-6 py-4 shadow-md">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <span routerLink="/dashboard" class="text-xl font-bold tracking-wide cursor-pointer hover:text-brand-accent transition-colors">← Back to Dashboard</span>
+      <span class="text-sm opacity-70">NatureTek Grievance Lodgement</span>
+    </div>
+  </header>
+
+  <main class="max-w-4xl w-full mx-auto px-6 py-12 flex-grow">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div class="p-8 border-b border-gray-100 bg-gray-50/50">
+        <h1 class="text-2xl font-bold text-brand-dark">File a Technical or Billing Grievance</h1>
+        <p class="text-sm text-gray-500 mt-1">Provide accurate system details so our routing algorithm can assign the right engineering team.</p>
+      </div>
+
+      <form class="p-8 space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Issue Category</label>
+            <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none bg-white transition-all">
+              <option value="" disabled selected>Select an infrastructure component</option>
+              <option value="inverter">Solar Inverter Fault</option>
+              <option value="panels">Panel Physical/Performance Damage</option>
+              <option value="battery">Energy Storage / Battery System</option>
+              <option value="billing">Net Metering / Billing Discrepancy</option>
+              <option value="other">Other Inquiry</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Solar Array ID / Plant Reference (Optional)</label>
+            <input type="text" placeholder="e.g., NT-ARRAY-XYZ-01" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Brief Summary / Subject</label>
+          <input type="text" placeholder="e.g., Inverter blinking orange light, error code E3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Detailed Description</label>
+          <textarea rows="5" placeholder="Describe what happened, when the issue started, or any troubleshooting steps you've tried..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all resize-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Upload Supporting Artifacts (Images / Log Export)</label>
+          <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-accent cursor-pointer transition-colors bg-gray-50/50">
+            <span class="text-sm text-gray-500 block mb-1">Drag and drop images here, or click to browse</span>
+            <span class="text-xs text-gray-400">Supports PNG, JPG, PDF up to 5MB</span>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 flex justify-end gap-4">
+          <button type="button" routerLink="/dashboard" class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+            Cancel
+          </button>
+          <button type="button" routerLink="/dashboard" class="px-6 py-3 bg-brand-dark text-white font-bold rounded-lg hover:bg-[#13442a] transition-all shadow-md">
+            Submit Ticket
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

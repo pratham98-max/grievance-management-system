@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-brand-light font-sans text-gray-800">
+  <header class="bg-brand-dark text-white px-6 py-4 shadow-md">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2 routerLink" routerLink="/">
+        <span class="text-xl font-bold tracking-wide cursor-pointer">NatureTek Support</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium opacity-90">Welcome, Customer</span>
+        <button routerLink="/" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded transition-colors text-sm font-semibold">
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-10">
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold text-brand-dark mb-2">Solar Account Dashboard</h1>
+        <p class="text-gray-500">Monitor your infrastructure requests and track real-time resolution metrics.</p>
+      </div>
+      <button routerLink="/lodge-complaint" class="px-6 py-3 bg-brand-accent text-white font-bold rounded-xl hover:bg-[#6ba038] transition-colors shadow-lg flex items-center gap-2 whitespace-nowrap">
+        <span>+</span> Lodge New Complaint
+      </button>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm text-gray-400 font-semibold tracking-wider uppercase mb-1">Total Grievances</p>
+        <p class="text-3xl font-bold text-brand-dark">3</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm text-gray-400 font-semibold tracking-wider uppercase mb-1">Pending Resolution</p>
+        <p class="text-3xl font-bold text-amber-600">1</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+        <p class="text-sm text-gray-400 font-semibold tracking-wider uppercase mb-1">Resolved Tickets</p>
+        <p class="text-3xl font-bold text-brand-accent">2</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <h2 class="font-bold text-brand-dark text-lg">Your Tickets</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-xs font-semibold uppercase bg-gray-50 text-gray-400 border-b border-gray-100" >
+              <th class="px-6 py-4">Ticket ID</th>
+              <th class="px-6 py-4">Category</th>
+              <th class="px-6 py-4">Subject</th>
+              <th class="px-6 py-4">Date Raised</th>
+              <th class="px-6 py-4">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-sm">
+            <tr class="hover:bg-gray-50/70 transition-colors" routerLink="/ticket/NT-9082">
+              <td class="px-6 py-4 font-mono font-medium text-gray-500">#NT-9082</td>
+              <td class="px-6 py-4 font-medium text-gray-900">Inverter Issue</td>
+              <td class="px-6 py-4 text-gray-600">Red light blinking, system not generating power</td>
+              <td class="px-6 py-4 text-gray-500">May 24, 2026</td>
+              <td class="px-6 py-4">
+                <span class="px-2.5 py-1 text-xs font-semibold bg-amber-50 text-amber-700 rounded-full border border-amber-200">Pending</span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50/70 transition-colors">
+              <td class="px-6 py-4 font-mono font-medium text-gray-500">#NT-8431</td>
+              <td class="px-6 py-4 font-medium text-gray-900">Panel Damage</td>
+              <td class="px-6 py-4 text-gray-600">Hail storm micro-cracks detected on Panel Group B</td>
+              <td class="px-6 py-4 text-gray-500">Apr 12, 2026</td>
+              <td class="px-6 py-4">
+                <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">Resolved</span>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50/70 transition-colors">
+              <td class="px-6 py-4 font-mono font-medium text-gray-500">#NT-7110</td>
+              <td class="px-6 py-4 font-medium text-gray-900">Billing Inquiry</td>
+              <td class="px-6 py-4 text-gray-600">Net metering units not reflected in monthly summary</td>
+              <td class="px-6 py-4 text-gray-500">Mar 05, 2026</td>
+              <td class="px-6 py-4">
+                <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">Resolved</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
