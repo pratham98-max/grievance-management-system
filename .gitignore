@@ -1,0 +1,21 @@
+# .gitignore
+
+# Node
+node_modules/
+dist/
+
+# Angular
+.angular/
+client/.angular/
+client/dist/
+
+# Environment Variables
+.env
+server/.env
+client/src/environments/environment.ts
+client/src/environments/environment.development.ts
+
+# Editor & OS
+.vscode/
+.idea/
+.DS_Store
