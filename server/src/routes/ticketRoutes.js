@@ -1,16 +1,29 @@
 import express from 'express';
-import { createTicket, getMyTickets } from '../controllers/ticketController.js';
-import { verifyToken } from '../middlewares/authMiddleware.js';
+import { 
+  createTicket, 
+  getMyTickets, 
+  getTicketById,
+  getAllTicketsAdmin,   
+  assignTicketAdmin,
+  getAssignedTickets    // <-- 1. Import the new function
+} from '../controllers/ticketController.js';
+import { verifyToken, requireRole } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// All ticket routes require the user to be logged in
 router.use(verifyToken); 
 
-// Route: POST /api/tickets -> Creates a new ticket
+// --- Customer Routes ---
 router.post('/', createTicket);
-
-// Route: GET /api/tickets/my-tickets -> Gets the customer's tickets
 router.get('/my-tickets', getMyTickets);
+router.get('/:id', getTicketById); 
+
+// --- Employee Routes ---
+// 2. Add this specific route for technicians
+router.get('/employee/assigned', requireRole(['EMPLOYEE']), getAssignedTickets);
+
+// --- Admin Only Routes ---
+router.get('/admin/all', requireRole(['ADMIN' , 'EMPLOYEE']), getAllTicketsAdmin);
+router.put('/admin/assign/:id', requireRole(['ADMIN' , 'EMPLOYEE']), assignTicketAdmin);
 
 export default router;

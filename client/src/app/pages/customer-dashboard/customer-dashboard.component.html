@@ -27,15 +27,15 @@
     <div class="grid sm:grid-cols-3 gap-6 mb-10">
       <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
         <p class="text-sm text-gray-400 font-semibold tracking-wider uppercase mb-1">Total Grievances</p>
-        <p class="text-3xl font-bold text-brand-dark">3</p>
+        <p class="text-3xl font-bold text-brand-dark">{{ totalGrievances }}</p>
       </div>
       <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
         <p class="text-sm text-gray-400 font-semibold tracking-wider uppercase mb-1">Pending Resolution</p>
-        <p class="text-3xl font-bold text-amber-600">1</p>
+        <p class="text-3xl font-bold text-amber-600">{{ pendingResolution }}</p>
       </div>
       <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
         <p class="text-sm text-gray-400 font-semibold tracking-wider uppercase mb-1">Resolved Tickets</p>
-        <p class="text-3xl font-bold text-brand-accent">2</p>
+        <p class="text-3xl font-bold text-brand-accent">{{ resolvedTickets }}</p>
       </div>
     </div>
 
@@ -55,33 +55,32 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100 text-sm">
-            <tr class="hover:bg-gray-50/70 transition-colors" routerLink="/ticket/NT-9082">
-              <td class="px-6 py-4 font-mono font-medium text-gray-500">#NT-9082</td>
-              <td class="px-6 py-4 font-medium text-gray-900">Inverter Issue</td>
-              <td class="px-6 py-4 text-gray-600">Red light blinking, system not generating power</td>
-              <td class="px-6 py-4 text-gray-500">May 24, 2026</td>
-              <td class="px-6 py-4">
-                <span class="px-2.5 py-1 text-xs font-semibold bg-amber-50 text-amber-700 rounded-full border border-amber-200">Pending</span>
+            
+            <tr *ngIf="isLoading">
+              <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                Loading your infrastructure requests...
               </td>
             </tr>
-            <tr class="hover:bg-gray-50/70 transition-colors">
-              <td class="px-6 py-4 font-mono font-medium text-gray-500">#NT-8431</td>
-              <td class="px-6 py-4 font-medium text-gray-900">Panel Damage</td>
-              <td class="px-6 py-4 text-gray-600">Hail storm micro-cracks detected on Panel Group B</td>
-              <td class="px-6 py-4 text-gray-500">Apr 12, 2026</td>
-              <td class="px-6 py-4">
-                <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">Resolved</span>
+
+            <tr *ngIf="!isLoading && tickets.length === 0">
+              <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                You have no active or past grievance tickets. 
+                <a routerLink="/lodge-complaint" class="text-brand-accent font-semibold hover:underline ml-1">Lodge a complaint here.</a>
               </td>
             </tr>
-            <tr class="hover:bg-gray-50/70 transition-colors">
-              <td class="px-6 py-4 font-mono font-medium text-gray-500">#NT-7110</td>
-              <td class="px-6 py-4 font-medium text-gray-900">Billing Inquiry</td>
-              <td class="px-6 py-4 text-gray-600">Net metering units not reflected in monthly summary</td>
-              <td class="px-6 py-4 text-gray-500">Mar 05, 2026</td>
+
+            <tr *ngFor="let ticket of tickets" class="hover:bg-gray-50/70 transition-colors cursor-pointer" [routerLink]="['/ticket', ticket.ticketId]">
+              <td class="px-6 py-4 font-mono font-medium text-brand-dark hover:underline">{{ ticket.ticketId }}</td>
+              <td class="px-6 py-4 font-medium text-gray-900">{{ ticket.category }}</td>
+              <td class="px-6 py-4 text-gray-600 truncate max-w-xs">{{ ticket.subject }}</td>
+              <td class="px-6 py-4 text-gray-500">{{ ticket.createdAt | date:'mediumDate' }}</td>
               <td class="px-6 py-4">
-                <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">Resolved</span>
+                <span *ngIf="ticket.status === 'PENDING'" class="px-2.5 py-1 text-xs font-semibold bg-amber-50 text-amber-700 rounded-full border border-amber-200">Pending</span>
+                <span *ngIf="ticket.status === 'IN_PROGRESS'" class="px-2.5 py-1 text-xs font-semibold bg-blue-50 text-blue-700 rounded-full border border-blue-200">In Progress</span>
+                <span *ngIf="ticket.status === 'RESOLVED'" class="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">Resolved</span>
               </td>
             </tr>
+
           </tbody>
         </table>
       </div>

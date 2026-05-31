@@ -7,6 +7,7 @@ import { connectDB } from './config/db.js';
 import './config/firebase.js';
 import authRoutes from './routes/authRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Log HTTP requests
 app.use('/api/auth', authRoutes);
 app.use('/api/tickets', ticketRoutes);
+app.use('/api/users', userRoutes);
 
 // Basic Health Check Route
 app.get('/api/health', (req, res) => {

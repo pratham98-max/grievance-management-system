@@ -1,0 +1,54 @@
+<div class="min-h-screen bg-gray-50 flex flex-col">
+  <main class="max-w-7xl mx-auto px-6 py-10 w-full flex-grow">
+    
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-brand-dark mb-2">Technician Portal</h1>
+      <p class="text-gray-600">Manage and resolve your assigned infrastructure tasks.</p>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-10 text-gray-500">Loading your assignments...</div>
+    <div *ngIf="errorMessage" class="bg-red-50 text-red-600 p-4 rounded-lg">{{ errorMessage }}</div>
+
+    <div *ngIf="!isLoading && tickets.length === 0" class="text-center py-10 bg-white rounded-xl border border-gray-100 shadow-sm">
+      <p class="text-gray-500 font-medium">You have no assigned tasks right now. Great job!</p>
+    </div>
+
+    <div *ngIf="!isLoading && tickets.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <div *ngFor="let ticket of tickets" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
+        <div class="flex justify-between items-start mb-4">
+          <span class="text-sm font-mono font-bold text-brand-dark">#{{ ticket.ticketId }}</span>
+          <span class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase"
+                [ngClass]="{
+                  'bg-amber-50 text-amber-700 border-amber-200': ticket.status === 'PENDING',
+                  'bg-blue-50 text-blue-700 border-blue-200': ticket.status === 'IN_PROGRESS',
+                  'bg-emerald-50 text-emerald-700 border-emerald-200': ticket.status === 'RESOLVED'
+                }">
+            {{ ticket.status.replace('_', ' ') }}
+          </span>
+        </div>
+
+        <h3 class="font-bold text-gray-900 mb-1">{{ ticket.subject }}</h3>
+        <p class="text-sm text-gray-500 mb-4 flex-grow line-clamp-3">{{ ticket.description }}</p>
+        
+        <div class="text-xs text-gray-400 mb-6">
+          <p>Customer: {{ ticket.customer?.name }}</p>
+          <p *ngIf="ticket.plantReference">Plant: {{ ticket.plantReference }}</p>
+        </div>
+
+        <div class="flex gap-2 mt-auto">
+          <button *ngIf="ticket.status === 'PENDING'" (click)="updateStatus(ticket, 'IN_PROGRESS')" class="flex-1 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-bold rounded-lg transition-colors">
+            Start Work
+          </button>
+          <button *ngIf="ticket.status === 'IN_PROGRESS'" (click)="updateStatus(ticket, 'RESOLVED')" class="flex-1 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-bold rounded-lg transition-colors">
+            Mark Resolved
+          </button>
+          <a [routerLink]="['/ticket', ticket.ticketId]" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-lg transition-colors">
+            Details
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

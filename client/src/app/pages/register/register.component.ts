@@ -33,11 +33,14 @@ export class RegisterComponent {
     this.isLoading = true;
     
     // Call our service to create the user in Firebase AND MongoDB
-    this.authService.register(this.email, this.password, this.name).subscribe({
+   // Pass 'CUSTOMER' explicitly as the 4th argument!
+    this.authService.register(this.email, this.password, this.name, 'CUSTOMER').subscribe({
       next: (res) => {
         this.isLoading = false;
         console.log('User synced successfully:', res);
-        this.router.navigate(['/dashboard']); // Route to dashboard on success!
+        
+        // Everyone registering here goes to the standard dashboard
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;

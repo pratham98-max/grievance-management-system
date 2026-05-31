@@ -1,6 +1,12 @@
-import { Injectable, inject } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, inject, NgZone } from '@angular/core';
+import { 
+  Auth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged 
+} from '@angular/fire/auth';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, from, switchMap } from 'rxjs';
 
@@ -8,46 +14,59 @@ import { Observable, from, switchMap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private auth: Auth = inject(Auth);
-  private http: HttpClient = inject(HttpClient);
-  
-  // This automatically tracks if a user is logged in or not
-  user$ = user(this.auth);
+  private auth = inject(Auth);
+  private http = inject(HttpClient);
+  private ngZone = inject(NgZone); // <-- 1. Inject Angular's Zone Fixer
 
-  constructor() { }
-
-  // 1. Register a new user
-  register(email: string, password: string, name: string): Observable<any> {
+  register(email: string, password: string, name: string, role: string): Observable<any> {
     return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((userCredential) => {
-        // After Firebase creates the user, send their details to our Node.js Backend!
         const uid = userCredential.user.uid;
         return this.http.post(`${environment.apiUrl}/auth/sync`, {
           firebaseUid: uid,
           email: email,
           name: name,
-          role: 'CUSTOMER' // Default role for open signups
+          role: role
         });
       })
     );
   }
 
-  // 2. Login an existing user
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<any> {
     return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
-  // 3. Logout
-  logout() {
+  logout(): Observable<void> {
     return from(signOut(this.auth));
   }
 
-  // 4. Get the secure token to attach to future backend requests
-  async getToken(): Promise<string | null> {
-    const currentUser = this.auth.currentUser;
-    if (currentUser) {
-      return await currentUser.getIdToken();
-    }
-    return null;
+  // 2. Wrap the token resolution safely inside the Angular Zone
+  getToken(): Promise<string | null> {
+    return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(this.auth, async (firebaseUser) => {
+        unsubscribe(); // Stop listening immediately
+
+        if (firebaseUser) {
+          try {
+            const token = await firebaseUser.getIdToken();
+            this.ngZone.run(() => resolve(token)); // <-- Bring back to Angular!
+          } catch (error) {
+            console.error('Failed to get token:', error);
+            this.ngZone.run(() => resolve(null));
+          }
+        } else {
+          this.ngZone.run(() => resolve(null)); // <-- Bring back to Angular!
+        }
+      });
+    });
+  }
+
+  getUserProfile(): Observable<any> {
+    return from(this.getToken()).pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.get(`${environment.apiUrl}/auth/me`, { headers });
+      })
+    );
   }
 }

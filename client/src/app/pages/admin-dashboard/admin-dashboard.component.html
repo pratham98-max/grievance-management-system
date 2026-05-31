@@ -1,0 +1,121 @@
+<div class="min-h-screen flex bg-gray-50 font-sans text-gray-800">
+  
+  <aside class="w-64 bg-brand-dark text-white flex flex-col hidden md:flex">
+    <div class="p-6 border-b border-white/10">
+      <h2 class="text-xl font-bold tracking-wide">NatureTek</h2>
+      <p class="text-brand-accent text-xs mt-1 uppercase tracking-wider font-semibold">Admin Command</p>
+    </div>
+    <nav class="flex-grow py-6 px-4 space-y-2">
+      <a routerLink="/admin/dashboard" class="block px-4 py-3 bg-white/10 rounded-lg text-sm font-medium transition-colors">
+        Master Ticket Pool
+      </a>
+      <a routerLink="/admin/categories" class="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">
+        Manage Categories
+      </a>
+      <a href="#" class="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">
+        Employee Directory
+      </a>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <button routerLink="/" class="w-full px-4 py-2 bg-red-500/20 text-red-200 hover:bg-red-500/40 hover:text-white rounded transition-colors text-sm font-medium">
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-grow flex flex-col h-screen overflow-hidden">
+    
+    <header class="bg-white px-8 py-5 border-b border-gray-200 flex justify-between items-center z-10 shadow-sm">
+      <h1 class="text-2xl font-bold text-brand-dark">Master Ticket Pool</h1>
+      <div class="flex gap-4">
+        <span class="px-4 py-2 bg-brand-light text-brand-dark rounded-lg text-sm font-semibold border border-brand-accent/30">
+          System Status: Optimal
+        </span>
+      </div>
+    </header>
+
+    <div class="p-8 overflow-y-auto flex-grow">
+      
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-brand-accent/20 border-l-4 border-l-brand-primary">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Total Tickets</h3>
+            <div class="text-3xl font-bold text-gray-900">{{ totalTickets }}</div>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-brand-accent/20 border-l-4 border-l-amber-500">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Unassigned</h3>
+            <div class="text-3xl font-bold text-gray-900">{{ unassignedTickets }}</div>
+          </div>
+
+          </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+          <input type="text" placeholder="Search by Ticket ID, Customer, or Keyword..." class="px-4 py-2 border border-gray-300 rounded-lg text-sm w-96 focus:ring-2 focus:ring-brand-accent outline-none">
+          <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded hover:bg-gray-50">
+            Filter View
+          </button>
+        </div>
+        
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-xs font-bold uppercase bg-white text-gray-500 border-b border-gray-200">
+              <th class="px-6 py-4">Ticket Details</th>
+              <th class="px-6 py-4">Category</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4">Assigned To</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-sm">
+            
+            <tr *ngIf="isLoading">
+              <td colspan="6" class="px-6 py-8 text-center text-gray-500">Loading master ticket pool...</td>
+            </tr>
+
+            <tr *ngFor="let ticket of tickets" class="hover:bg-gray-50/70 transition-colors">
+              <td class="px-6 py-4 font-mono font-medium text-brand-dark">
+                <a [routerLink]="['/ticket', ticket.ticketId]" class="hover:underline">{{ ticket.ticketId }}</a>
+              </td>
+              <td class="px-6 py-4">
+                <div class="font-medium text-gray-900">{{ ticket.customer?.name || 'Unknown User' }}</div>
+                <div class="text-xs text-gray-500">{{ ticket.customer?.email }}</div>
+              </td>
+              <td class="px-6 py-4 text-gray-600 truncate max-w-xs">{{ ticket.subject }}</td>
+              <td class="px-6 py-4 text-gray-500">{{ ticket.createdAt | date:'shortDate' }}</td>
+              
+              <td class="px-6 py-4">
+                <select 
+                  class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg focus:ring-brand-accent focus:border-brand-accent block w-full p-2 outline-none"
+                  [value]="ticket.assignedTo?._id || ''"
+                  (change)="onUpdateTicket(ticket, 'employeeId', $event)">
+                  <option value="" disabled selected>Unassigned</option>
+                  <option *ngFor="let emp of employees" [value]="emp._id">{{ emp.name }}</option>
+                </select>
+              </td>
+
+              <td class="px-6 py-4">
+                <select 
+                  class="text-xs font-bold rounded-lg border-none focus:ring-2 focus:ring-brand-accent p-2 outline-none cursor-pointer"
+                  [ngClass]="{
+                    'bg-amber-50 text-amber-700': ticket.status === 'PENDING',
+                    'bg-blue-50 text-blue-700': ticket.status === 'IN_PROGRESS',
+                    'bg-emerald-50 text-emerald-700': ticket.status === 'RESOLVED'
+                  }"
+                  [value]="ticket.status"
+                  (change)="onUpdateTicket(ticket, 'status', $event)">
+                  <option value="PENDING">PENDING</option>
+                  <option value="IN_PROGRESS">IN PROGRESS</option>
+                  <option value="RESOLVED">RESOLVED</option>
+                </select>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>

@@ -1,0 +1,124 @@
+<div class="min-h-screen bg-brand-light font-sans text-gray-800 flex flex-col">
+  <header class="bg-brand-dark text-white px-6 py-4 shadow-md">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <span routerLink="/dashboard" class="text-xl font-bold tracking-wide cursor-pointer hover:text-brand-accent transition-colors">← Back to Dashboard</span>
+      <div class="flex items-center gap-3">
+        <span *ngIf="ticket" class="text-sm font-mono bg-white/10 px-3 py-1 rounded">Ticket #{{ ticket.ticketId }}</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl w-full mx-auto px-6 py-10 flex-grow">
+    
+    <div *ngIf="isLoading" class="text-center py-20 text-gray-500 font-medium">
+      Loading ticket details...
+    </div>
+
+    <div *ngIf="errorMessage" class="text-center py-20 text-red-500 font-medium">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="ticket && !isLoading" class="grid md:grid-cols-3 gap-8">
+      
+      <div class="md:col-span-2 space-y-6">
+        
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h1 class="text-2xl font-bold text-brand-dark">{{ ticket.subject }}</h1>
+              <p class="text-sm text-gray-500 mt-1">Category: {{ ticket.category }} • Filed on {{ ticket.createdAt | date:'mediumDate' }}</p>
+            </div>
+            <span class="px-3 py-1 text-xs font-bold uppercase rounded-full border" 
+                  [ngClass]="{
+                    'bg-amber-50 text-amber-700 border-amber-200': ticket.status === 'PENDING',
+                    'bg-blue-50 text-blue-700 border-blue-200': ticket.status === 'IN_PROGRESS',
+                    'bg-emerald-50 text-emerald-700 border-emerald-200': ticket.status === 'RESOLVED'
+                  }">
+              {{ ticket.status.replace('_', ' ') }}
+            </span>
+          </div>
+          
+          <div class="prose text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4 whitespace-pre-wrap">{{ ticket.description }}</div>
+          
+          <div *ngIf="ticket.plantReference" class="mt-4 text-sm font-medium text-gray-700">
+            Plant Reference: <span class="text-gray-500">{{ ticket.plantReference }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col h-[500px]">
+          <h2 class="text-lg font-bold text-brand-dark mb-4 border-b border-gray-100 pb-2">Support Chat</h2>
+
+          <div class="flex-grow overflow-y-auto space-y-4 mb-4 pr-2">
+            
+            <div *ngIf="comments.length === 0" class="text-sm text-gray-500 italic text-center mt-20">
+              No messages yet. Start the conversation!
+            </div>
+
+            <div *ngFor="let comment of comments" class="flex flex-col" 
+                 [ngClass]="comment.sender.role === 'CUSTOMER' ? 'items-start' : 'items-end'">
+              
+              <div class="max-w-[85%] rounded-2xl p-3 text-sm shadow-sm"
+                   [ngClass]="comment.sender.role === 'CUSTOMER' 
+                     ? 'bg-gray-100 text-gray-800 rounded-bl-sm' 
+                     : 'bg-emerald-50 text-emerald-900 border border-emerald-100 rounded-br-sm'">
+                
+                <div class="font-bold text-[11px] mb-1 opacity-60 uppercase tracking-wider">
+                  {{ comment.sender.name }} ({{ comment.sender.role }})
+                </div>
+                
+                <div class="leading-relaxed whitespace-pre-wrap">{{ comment.text }}</div>
+              </div>
+              
+              <div class="text-[10px] text-gray-400 mt-1 px-1">
+                {{ comment.createdAt | date:'short' }}
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex gap-3 pt-4 border-t border-gray-100">
+            <input type="text" 
+                   [(ngModel)]="newCommentText" 
+                   (keyup.enter)="sendComment()" 
+                   placeholder="Type a message..." 
+                   class="flex-grow bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-accent transition-all">
+            
+            <button (click)="sendComment()" 
+                    [disabled]="!newCommentText.trim() || isSending" 
+                    class="bg-brand-accent text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
+              {{ isSending ? '...' : 'Send' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h2 class="text-lg font-bold text-brand-dark mb-6">Resolution Timeline</h2>
+          
+          <div class="relative pl-4 border-l-2 border-gray-200 space-y-8">
+            <div class="relative">
+              <div class="absolute -left-[23px] w-3 h-3 rounded-full border-4 border-white shadow"
+                   [ngClass]="ticket.status === 'RESOLVED' ? 'bg-brand-accent' : 'bg-gray-300'"></div>
+              <h3 class="text-sm font-bold" [ngClass]="ticket.status === 'RESOLVED' ? 'text-gray-800' : 'text-gray-400'">Resolved</h3>
+            </div>
+
+            <div class="relative">
+              <div class="absolute -left-[23px] w-3 h-3 rounded-full border-4 border-white shadow"
+                   [ngClass]="ticket.status === 'IN_PROGRESS' || ticket.status === 'RESOLVED' ? 'bg-brand-accent' : 'bg-gray-300'"></div>
+              <h3 class="text-sm font-bold" [ngClass]="ticket.status === 'IN_PROGRESS' || ticket.status === 'RESOLVED' ? 'text-gray-800' : 'text-gray-400'">In Progress</h3>
+            </div>
+
+            <div class="relative">
+              <div class="absolute -left-[23px] w-3 h-3 bg-brand-accent rounded-full border-4 border-white shadow"></div>
+              <h3 class="text-sm font-bold text-gray-800">Ticket Submitted</h3>
+              <p class="text-xs text-gray-500 mt-1">{{ ticket.createdAt | date:'medium' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
