@@ -1,54 +1,135 @@
-<div class="min-h-screen bg-gray-50 flex flex-col">
-  <main class="max-w-7xl mx-auto px-6 py-10 w-full flex-grow">
+<div class="min-h-screen bg-gray-100 relative font-sans pb-12">
+  
+  <div class="absolute top-0 left-0 w-full h-72 bg-brand-dark rounded-b-[3rem] shadow-inner z-0">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
     
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-brand-dark mb-2">Technician Portal</h1>
-      <p class="text-gray-600">Manage and resolve your assigned infrastructure tasks.</p>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 fade-in-up">
+      <div>
+        <h1 class="text-3xl font-black text-white tracking-tight">Field Operations Dashboard</h1>
+        <p class="text-sm text-brand-accent font-medium mt-1">Track assigned grid workloads and update ongoing resolutions.</p>
+      </div>
     </div>
 
-    <div *ngIf="isLoading" class="text-center py-10 text-gray-500">Loading your assignments...</div>
-    <div *ngIf="errorMessage" class="bg-red-50 text-red-600 p-4 rounded-lg">{{ errorMessage }}</div>
-
-    <div *ngIf="!isLoading && tickets.length === 0" class="text-center py-10 bg-white rounded-xl border border-gray-100 shadow-sm">
-      <p class="text-gray-500 font-medium">You have no assigned tasks right now. Great job!</p>
-    </div>
-
-    <div *ngIf="!isLoading && tickets.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8 fade-in-up delay-100">
       
-      <div *ngFor="let ticket of tickets" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
-        <div class="flex justify-between items-start mb-4">
-          <span class="text-sm font-mono font-bold text-brand-dark">#{{ ticket.ticketId }}</span>
-          <span class="px-2.5 py-1 text-xs font-bold rounded-full border uppercase"
-                [ngClass]="{
-                  'bg-amber-50 text-amber-700 border-amber-200': ticket.status === 'PENDING',
-                  'bg-blue-50 text-blue-700 border-blue-200': ticket.status === 'IN_PROGRESS',
-                  'bg-emerald-50 text-emerald-700 border-emerald-200': ticket.status === 'RESOLVED'
-                }">
-            {{ ticket.status.replace('_', ' ') }}
-          </span>
+      <div class="bg-white rounded-2xl p-5 shadow-xl border border-gray-100 flex items-center gap-4 hover-lift">
+        <div class="p-3 bg-gray-50 rounded-xl text-brand-dark">
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
         </div>
-
-        <h3 class="font-bold text-gray-900 mb-1">{{ ticket.subject }}</h3>
-        <p class="text-sm text-gray-500 mb-4 flex-grow line-clamp-3">{{ ticket.description }}</p>
-        
-        <div class="text-xs text-gray-400 mb-6">
-          <p>Customer: {{ ticket.customer?.name }}</p>
-          <p *ngIf="ticket.plantReference">Plant: {{ ticket.plantReference }}</p>
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Assignments</p>
+          <p class="text-2xl font-black text-gray-900 mt-0.5">{{ tickets.length }}</p>
         </div>
+      </div>
 
-        <div class="flex gap-2 mt-auto">
-          <button *ngIf="ticket.status === 'PENDING'" (click)="updateStatus(ticket, 'IN_PROGRESS')" class="flex-1 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-bold rounded-lg transition-colors">
-            Start Work
-          </button>
-          <button *ngIf="ticket.status === 'IN_PROGRESS'" (click)="updateStatus(ticket, 'RESOLVED')" class="flex-1 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-bold rounded-lg transition-colors">
-            Mark Resolved
-          </button>
-          <a [routerLink]="['/ticket', ticket.ticketId]" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-lg transition-colors">
-            Details
-          </a>
+      <div class="bg-white rounded-2xl p-5 shadow-xl border border-gray-100 flex items-center gap-4 hover-lift">
+        <div class="p-3 bg-amber-50 rounded-xl text-amber-500">
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">In Progress Queue</p>
+          <p class="text-2xl font-black text-amber-500 mt-0.5">{{ inProgressCount }}</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 shadow-xl border border-gray-100 flex items-center gap-4 hover-lift">
+        <div class="p-3 bg-emerald-50 rounded-xl text-emerald-500">
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Resolved Tasks</p>
+          <p class="text-2xl font-black text-emerald-500 mt-0.5">{{ resolvedCount }}</p>
         </div>
       </div>
 
     </div>
-  </main>
+
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-200/80 overflow-hidden fade-in-up delay-200">
+      
+      <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-5.5 bg-brand-accent rounded-full"></div>
+          <h2 class="text-base font-bold text-gray-800">Your Action Items</h2>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-white border-b border-gray-200 text-xs font-bold text-gray-400 uppercase tracking-wider">
+              <th class="px-6 py-3.5">Ticket ID</th>
+              <th class="px-6 py-3.5">Subject</th>
+              <th class="px-6 py-3.5">Priority</th>
+              <th class="px-6 py-3.5">Current Status</th>
+              <th class="px-6 py-3.5 text-right">Operational Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
+            
+            <tr *ngFor="let ticket of tickets" class="hover:bg-gray-50/70 transition-colors group">
+              <td class="px-6 py-4">
+                <a [routerLink]="['/ticket', ticket.ticketId]" class="font-mono font-bold text-brand-dark group-hover:text-brand-accent transition-colors no-underline">
+                  {{ ticket.ticketId }}
+                </a>
+              </td>
+              
+              <td class="px-6 py-4 max-w-xs truncate text-gray-900 font-semibold">
+                {{ ticket.subject }}
+              </td>
+
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider"
+                      [ngClass]="{
+                        'bg-red-50 text-red-600 border border-red-100': ticket.priority === 'Critical',
+                        'bg-amber-50 text-amber-600 border border-amber-100': ticket.priority === 'High',
+                        'bg-blue-50 text-blue-600 border border-blue-100': ticket.priority === 'Medium',
+                        'bg-gray-100 text-gray-500': ticket.priority === 'Low' || !ticket.priority
+                      }">
+                  {{ ticket.priority || 'Medium' }}
+                </span>
+              </td>
+
+              <td class="px-6 py-4">
+                <select [value]="ticket.status"
+                        (change)="updateTicketStatus(ticket, $event)"
+                        class="px-2 py-1 text-xs font-bold uppercase tracking-wide rounded-md bg-white border border-gray-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-accent transition-all"
+                        [ngClass]="{
+                          'text-amber-500 border-amber-200 bg-amber-50/20': ticket.status === 'Open' || ticket.status === 'PENDING',
+                          'text-blue-500 border-blue-200 bg-blue-50/20': ticket.status === 'IN_PROGRESS',
+                          'text-emerald-500 border-emerald-200 bg-emerald-50/20': ticket.status === 'RESOLVED' || ticket.status === 'CLOSED'
+                        }">
+                  <option value="Open">Open</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="RESOLVED">Resolved</option>
+                  <option value="CLOSED">Closed</option>
+                </select>
+              </td>
+
+              <td class="px-6 py-4 text-right">
+                <a [routerLink]="['/ticket', ticket.ticketId]" 
+                   class="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-50 hover:bg-brand-dark hover:text-white rounded-xl text-xs font-bold transition-all border border-gray-200 shadow-sm no-underline text-gray-700 cursor-pointer">
+                  Open Thread
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+              </td>
+            </tr>
+
+            <tr *ngIf="tickets.length === 0">
+              <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                <svg class="mx-auto h-12 w-12 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <p class="font-bold text-base text-gray-800">No active operational items</p>
+                <p class="text-xs text-gray-400 mt-0.5">All infrastructure complaints assigned to you have been successfully completed.</p>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
 </div>

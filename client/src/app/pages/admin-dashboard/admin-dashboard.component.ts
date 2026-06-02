@@ -15,7 +15,8 @@ export class AdminDashboardComponent implements OnInit {
   tickets: any[] = [];
   employees: any[] = [];
   isLoading = true;
-  errorMessage = '';
+  errorMessage = '';  
+  criticalCount: number = 0;
 
   // Quick Stats
   totalTickets = 0;
@@ -60,6 +61,9 @@ export class AdminDashboardComponent implements OnInit {
   calculateStats() {
     this.totalTickets = this.tickets.length;
     this.unassignedTickets = this.tickets.filter(t => !t.assignedTo).length;
+    
+    // UPDATED: Dynamically parsing active critical risks inside the metric stream
+    this.criticalCount = this.tickets.filter(t => t.priority === 'Critical').length;
   }
 
   // Handle dropdown changes instantly!
@@ -72,8 +76,12 @@ export class AdminDashboardComponent implements OnInit {
       next: (res) => {
         console.log('Ticket updated!', res);
         // Update local state without full refresh
-        if (field === 'employeeId') ticket.assignedTo = { _id: newValue };
-        if (field === 'status') ticket.status = newValue;
+        if (field === 'employeeId' || field === 'assignedTo') {
+          ticket.assignedTo = { _id: newValue };
+        }
+        if (field === 'status') {
+          ticket.status = newValue;
+        }
         
         this.calculateStats();
         this.cdr.detectChanges();

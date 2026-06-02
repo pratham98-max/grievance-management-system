@@ -1,114 +1,219 @@
-<div class="min-h-screen flex bg-gray-50 font-sans text-gray-800">
+<div class="min-h-screen bg-gray-100 relative font-sans pb-12">
   
-  <aside class="w-64 bg-brand-dark text-white flex flex-col hidden md:flex">
-    <div class="p-6 border-b border-white/10">
-      <h2 class="text-xl font-bold tracking-wide">NatureTek</h2>
-      <p class="text-brand-accent text-xs mt-1 uppercase tracking-wider font-semibold">Admin Command</p>
-    </div>
-    <nav class="flex-grow py-6 px-4 space-y-2">
-      <a routerLink="/admin/dashboard" class="block px-4 py-3 bg-white/10 rounded-lg text-sm font-medium transition-colors">
-        Master Ticket Pool
-      </a>
-      <a routerLink="/admin/categories" class="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">
-        Manage Categories
-      </a>
-      <a href="#" class="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">
-        Employee Directory
-      </a>
-    </nav>
-    <div class="p-4 border-t border-white/10">
-      <button routerLink="/" class="w-full px-4 py-2 bg-red-500/20 text-red-200 hover:bg-red-500/40 hover:text-white rounded transition-colors text-sm font-medium">
-        Logout
-      </button>
-    </div>
-  </aside>
+  <!-- Overlapping Deep-Green Command Banner -->
+  <div class="absolute top-0 left-0 w-full h-80 bg-brand-dark rounded-b-[3rem] shadow-inner z-0">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+  </div>
 
-  <main class="flex-grow flex flex-col h-screen overflow-hidden">
+  <!-- Content Layer -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
     
-    <header class="bg-white px-8 py-5 border-b border-gray-200 flex justify-between items-center z-10 shadow-sm">
-      <h1 class="text-2xl font-bold text-brand-dark">Master Ticket Pool</h1>
-      <div class="flex gap-4">
-        <span class="px-4 py-2 bg-brand-light text-brand-dark rounded-lg text-sm font-semibold border border-brand-accent/30">
-          System Status: Optimal
-        </span>
+    <!-- Top Stats Row Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 fade-in-up">
+      <div>
+        <h1 class="text-3xl font-black text-white tracking-tight">Admin Control Center</h1>
+        <p class="text-sm text-brand-accent font-medium mt-1">Global grid infrastructure operations overview.</p>
       </div>
-    </header>
-
-    <div class="p-8 overflow-y-auto flex-grow">
       
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-brand-accent/20 border-l-4 border-l-brand-primary">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Total Tickets</h3>
-            <div class="text-3xl font-bold text-gray-900">{{ totalTickets }}</div>
-          </div>
+      <!-- Operational Actions -->
+      <div class="flex items-center gap-3">
+        <button routerLink="/admin/categories" class="px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 rounded-xl text-xs font-bold transition-all shadow-sm">
+          Manage Categories
+        </button>
+        <div class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 px-4 py-2 rounded-xl text-xs font-bold tracking-wide flex items-center gap-2 shadow-inner">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          System Live
+        </div>
+      </div>
+    </div>
 
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-brand-accent/20 border-l-4 border-l-amber-500">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Unassigned</h3>
-            <div class="text-3xl font-bold text-gray-900">{{ unassignedTickets }}</div>
-          </div>
+    <!-- Analytical Performance Cards Matrix -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 fade-in-up delay-100">
+      
+      <!-- Total Tickets -->
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 flex justify-between items-start group">
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Active Pool</p>
+          <p class="text-3xl font-black text-gray-900 mt-2">{{ totalTickets }}</p>
+          <span class="text-[11px] text-gray-400 font-medium block mt-1">All registered client tickets</span>
+        </div>
+        <div class="p-3 bg-gray-50 text-gray-500 rounded-xl group-hover:bg-brand-dark/5 group-hover:text-brand-dark transition-colors">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        </div>
+      </div>
 
-          </div>
+      <!-- Critical Breaches -->
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 flex justify-between items-start group">
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Critical Priorities</p>
+          <p class="text-3xl font-black text-red-600 mt-2">{{ criticalCount }}</p>
+          <span class="text-[11px] text-red-500 font-bold block mt-1 flex items-center gap-1">
+            <svg class="w-3 h-3 animate-bounce" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+            Requires Allocation
+          </span>
+        </div>
+        <div class="p-3 bg-red-50 text-red-500 rounded-xl">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        </div>
+      </div>
 
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
-        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-          <input type="text" placeholder="Search by Ticket ID, Customer, or Keyword..." class="px-4 py-2 border border-gray-300 rounded-lg text-sm w-96 focus:ring-2 focus:ring-brand-accent outline-none">
-          <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded hover:bg-gray-50">
-            Filter View
-          </button>
+      <!-- Unassigned Monitoring Pool -->
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 flex justify-between items-start group">
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Unassigned Tickets</p>
+          <p class="text-3xl font-black text-amber-600 mt-2">{{ unassignedTickets }}</p>
+          <span class="text-[11px] text-gray-400 font-medium block mt-1">Pending engineering allocation</span>
+        </div>
+        <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+      </div>
+
+      <!-- Resolution Efficiency Rate -->
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 flex justify-between items-start group">
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">SLA Clearance Rate</p>
+          <p class="text-3xl font-black text-brand-dark mt-2">98.4%</p>
+          <span class="text-[11px] text-gray-400 font-medium block mt-1">Industrial standard benchmark</span>
+        </div>
+        <div class="p-3 bg-brand-accent/10 text-brand-dark rounded-xl">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Loading State Block -->
+    <div *ngIf="isLoading" class="flex flex-col justify-center items-center py-20 text-white fade-in-up">
+      <svg class="animate-spin h-10 w-10 text-brand-accent mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+      <p class="font-medium text-lg text-gray-700">Assembling master operation logs...</p>
+    </div>
+
+    <!-- Error State Block -->
+    <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl shadow-md mb-8 fade-in-up">
+      <p class="text-red-700 font-bold text-lg">{{ errorMessage }}</p>
+    </div>
+
+    <!-- Data Filters & Live Table Matrix Area -->
+    <div *ngIf="!isLoading && !errorMessage" class="bg-white rounded-2xl shadow-xl border border-gray-200/80 overflow-hidden fade-in-up delay-200">
+      
+      <!-- Operations Header with Tab Switchers -->
+      <div class="p-6 bg-gray-50 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-brand-dark rounded-full"></div>
+          <h2 class="text-lg font-black text-gray-800">Master Grievance Pool</h2>
         </div>
         
-        <table class="w-full text-left border-collapse">
+        <!-- Live Search & Interactive Filter Inputs -->
+        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <input type="text" placeholder="Search ticket ID or subject..." 
+                 class="px-4 py-2 text-xs font-medium bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent w-full sm:w-64">
+          
+          <select class="px-3 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded-xl cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-accent">
+            <option value="">All Priorities</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Master Pools Data Grid Table -->
+      <div class="overflow-x-auto dense-scrollbar">
+        <table class="min-w-full text-left border-collapse">
           <thead>
-            <tr class="text-xs font-bold uppercase bg-white text-gray-500 border-b border-gray-200">
-              <th class="px-6 py-4">Ticket Details</th>
+            <tr class="bg-white border-b border-gray-200 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+              <th class="px-6 py-4">Ticket details</th>
               <th class="px-6 py-4">Category</th>
+              <th class="px-6 py-4">Priority</th>
               <th class="px-6 py-4">Status</th>
-              <th class="px-6 py-4">Assigned To</th>
+              <th class="px-6 py-4">Assigned Engineer</th>
               <th class="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100 text-sm">
+          <tbody class="divide-y divide-gray-100 text-sm font-medium">
             
-            <tr *ngIf="isLoading">
-              <td colspan="6" class="px-6 py-8 text-center text-gray-500">Loading master ticket pool...</td>
+            <tr *ngFor="let ticket of tickets" class="hover:bg-gray-50/80 transition-colors group">
+              <!-- Ticket Meta Details -->
+              <td class="px-6 py-4">
+                <div class="flex flex-col">
+                  <a [routerLink]="['/ticket', ticket.ticketId]" class="text-sm font-extrabold text-gray-900 hover:text-brand-accent transition-colors no-underline">
+                    {{ ticket.subject }}
+                  </a>
+                  <span class="text-xs font-mono text-gray-400 mt-0.5">ID: {{ ticket.ticketId }} &bull; Opened {{ ticket.createdAt | date:'shortDate' }}</span>
+                </div>
+              </td>
+              
+              <!-- Category Badge -->
+              <td class="px-6 py-4">
+                <span class="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-semibold">
+                  {{ ticket.category }}
+                </span>
+              </td>
+              
+              <!-- Priority Status Marker -->
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider"
+                      [ngClass]="{
+                        'bg-red-50 text-red-700': ticket.priority === 'Critical',
+                        'bg-amber-50 text-amber-700': ticket.priority === 'High',
+                        'bg-blue-50 text-blue-700': ticket.priority === 'Medium',
+                        'bg-gray-100 text-gray-600': ticket.priority === 'Low' || !ticket.priority
+                      }">
+                  <span class="h-1.5 w-1.5 rounded-full" [ngClass]="ticket.priority === 'Critical' ? 'bg-red-500 animate-ping' : 'hidden'"></span>
+                  {{ ticket.priority || 'Medium' }}
+                </span>
+              </td>
+
+              <!-- Current Operational Status Badge -->
+              <td class="px-6 py-4">
+                <select [value]="ticket.status"
+                        (change)="onUpdateTicket(ticket, 'status', $event)"
+                        class="px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded-md border cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-accent"
+                        [ngClass]="{
+                          'bg-amber-50 text-amber-600 border-amber-200': ticket.status === 'Open' || ticket.status === 'PENDING',
+                          'bg-blue-50 text-blue-600 border-blue-200': ticket.status === 'IN_PROGRESS',
+                          'bg-emerald-50 text-emerald-600 border-emerald-200': ticket.status === 'RESOLVED' || ticket.status === 'CLOSED'
+                        }">
+                  <option value="Open">Open</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="RESOLVED">Resolved</option>
+                  <option value="CLOSED">Closed</option>
+                </select>
+              </td>
+
+              <!-- Live Employee Allocation Dropdown Column -->
+              <td class="px-6 py-4">
+                <select [value]="ticket.assignedTo?._id || ''"
+                        (change)="onUpdateTicket(ticket, 'employeeId', $event)"
+                        class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg px-2 py-1.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-accent w-full max-w-[180px]">
+                  <option value="">Unassigned</option>
+                  <option *ngFor="let emp of employees" [value]="emp._id">
+                    {{ emp.name }}
+                  </option>
+                </select>
+              </td>
+
+              <!-- Instant Admin Command Links -->
+              <td class="px-6 py-4 text-right">
+                <div class="flex justify-end gap-2">
+                  <a [routerLink]="['/ticket', ticket.ticketId]" class="p-2 text-gray-400 hover:text-brand-dark bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors" title="Open Thread">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                  </a>
+                  <button class="p-2 text-gray-400 hover:text-red-600 bg-gray-50 hover:bg-red-50 rounded-lg transition-colors" title="Delete Records">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-16v1c0 1.12-1.07 2-2 2H11c-1.12 0-2-1.07-2-2V4m6 0a2 2 0 00-2-2H9a2 2 0 00-2 2m5 4v6"></path></svg>
+                  </button>
+                </div>
+              </td>
             </tr>
 
-            <tr *ngFor="let ticket of tickets" class="hover:bg-gray-50/70 transition-colors">
-              <td class="px-6 py-4 font-mono font-medium text-brand-dark">
-                <a [routerLink]="['/ticket', ticket.ticketId]" class="hover:underline">{{ ticket.ticketId }}</a>
-              </td>
-              <td class="px-6 py-4">
-                <div class="font-medium text-gray-900">{{ ticket.customer?.name || 'Unknown User' }}</div>
-                <div class="text-xs text-gray-500">{{ ticket.customer?.email }}</div>
-              </td>
-              <td class="px-6 py-4 text-gray-600 truncate max-w-xs">{{ ticket.subject }}</td>
-              <td class="px-6 py-4 text-gray-500">{{ ticket.createdAt | date:'shortDate' }}</td>
-              
-              <td class="px-6 py-4">
-                <select 
-                  class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg focus:ring-brand-accent focus:border-brand-accent block w-full p-2 outline-none"
-                  [value]="ticket.assignedTo?._id || ''"
-                  (change)="onUpdateTicket(ticket, 'employeeId', $event)">
-                  <option value="" disabled selected>Unassigned</option>
-                  <option *ngFor="let emp of employees" [value]="emp._id">{{ emp.name }}</option>
-                </select>
-              </td>
-
-              <td class="px-6 py-4">
-                <select 
-                  class="text-xs font-bold rounded-lg border-none focus:ring-2 focus:ring-brand-accent p-2 outline-none cursor-pointer"
-                  [ngClass]="{
-                    'bg-amber-50 text-amber-700': ticket.status === 'PENDING',
-                    'bg-blue-50 text-blue-700': ticket.status === 'IN_PROGRESS',
-                    'bg-emerald-50 text-emerald-700': ticket.status === 'RESOLVED'
-                  }"
-                  [value]="ticket.status"
-                  (change)="onUpdateTicket(ticket, 'status', $event)">
-                  <option value="PENDING">PENDING</option>
-                  <option value="IN_PROGRESS">IN PROGRESS</option>
-                  <option value="RESOLVED">RESOLVED</option>
-                </select>
+            <!-- Fallback Empty Pool Row -->
+            <tr *ngIf="!tickets || tickets.length === 0">
+              <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                <svg class="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                <p class="font-bold text-base">Operational queues are clear</p>
+                <p class="text-xs text-gray-400 mt-0.5">No client complaints are active in the network profile tracking matrix.</p>
               </td>
             </tr>
 
@@ -117,5 +222,6 @@
       </div>
 
     </div>
-  </main>
+
+  </div>
 </div>

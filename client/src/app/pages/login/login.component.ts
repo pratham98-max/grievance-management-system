@@ -33,21 +33,22 @@ export class LoginComponent {
     this.errorMessage = '';
 
     this.authService.login(this.email, this.password).subscribe({
-      // Replace the routing section inside your onSubmit() next block with this:
-next: (response: any) => {
-  this.isLoading = false;
-  
-  const role = response?.user?.role || response?.role;
-  if (role === 'ADMIN') {
-    this.router.navigate(['/admin-dashboard']);
-  } else if (role === 'EMPLOYEE') {
-    this.router.navigate(['/employee-dashboard']);
-  } else {
-    this.router.navigate(['/customer-dashboard']); // <-- Fixed slash to hyphen!
-  }
-  
-  this.cdr.detectChanges();
-},
+      next: (response: any) => {
+        this.isLoading = false;
+        
+        const role = response?.user?.role || response?.role;
+        
+        // Fixed paths to perfectly align with your app.routes.ts paths
+        if (role === 'ADMIN') {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (role === 'EMPLOYEE') {
+          this.router.navigate(['/employee/dashboard']);
+        } else {
+          this.router.navigate(['/dashboard']); 
+        }
+        
+        this.cdr.detectChanges();
+      },
       error: (err: any) => {
         console.error('Login error:', err);
         this.errorMessage = err.error?.message || 'Invalid email or password. Please try again.';

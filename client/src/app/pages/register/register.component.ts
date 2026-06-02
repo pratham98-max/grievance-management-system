@@ -37,14 +37,16 @@ export class RegisterComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // CORRECTED: Passed 4 parameters matching the exact expected order: email, password, name, role
+    // Passed 4 parameters matching the exact expected order: email, password, name, role
     this.authService.register(this.email, this.password, this.name, 'CUSTOMER').subscribe({
-      // Replace the redirect line inside your next block with this:
-next: () => {
-  this.isLoading = false;
-  this.router.navigate(['/customer-dashboard']); // <-- Fixed slash to hyphen!
-  this.cdr.detectChanges();
-},
+      next: () => {
+        this.isLoading = false;
+        
+        // Fixed path to perfectly match 'dashboard' route from your app.routes.ts file
+        this.router.navigate(['/dashboard']); 
+        
+        this.cdr.detectChanges();
+      },
       error: (err: any) => {
         console.error('Registration processing error:', err);
         this.errorMessage = err.error?.message || 'Failed to create your profile. This email may already be in use.';
