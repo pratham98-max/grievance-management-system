@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TicketService } from '../../services/ticket.service';
@@ -7,48 +7,58 @@ import { TicketService } from '../../services/ticket.service';
 @Component({
   selector: 'app-lodge-complaint',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule],
-  templateUrl: './lodge-complaint.component.html',
-  styleUrls: ['./lodge-complaint.component.css']
+  imports: [FormsModule, CommonModule],
+  templateUrl: './lodge-complaint.component.html'
 })
 export class LodgeComplaintComponent {
   category = '';
-  plantReference = '';
   subject = '';
   description = '';
+  plantReference = '';
+  selectedFiles: File[] = [];
   
-  isLoading = false;
+  isSubmitting = false;
   errorMessage = '';
 
   private ticketService = inject(TicketService);
   private router = inject(Router);
 
+  onFileSelected(event: any) {
+    this.selectedFiles = Array.from(event.target.files);
+  }
+
   onSubmit() {
+    this.errorMessage = '';
+    
     if (!this.category || !this.subject || !this.description) {
       this.errorMessage = 'Please fill out all required fields.';
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = '';
+    this.isSubmitting = true;
 
-    const ticketData = {
-      category: this.category,
-      plantReference: this.plantReference,
-      subject: this.subject,
-      description: this.description
-    };
+    // --- Build a Standard multipart/form-data Object ---
+    const formData = new FormData();
+    formData.append('category', this.category);
+    formData.append('subject', this.subject);
+    formData.append('description', this.description);
+    formData.append('plantReference', this.plantReference);
 
-    this.ticketService.createTicket(ticketData).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        console.log('Ticket created:', res);
-        this.router.navigate(['/dashboard']); // Go back to dashboard on success
+    // Append each raw file to the FormData payload
+    this.selectedFiles.forEach((file) => {
+      formData.append('attachments', file, file.name);
+    });
+
+    // Send the FormData straight to your Node Backend!
+    this.ticketService.createTicket(formData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.isLoading = false;
         console.error(err);
-        this.errorMessage = 'Failed to submit ticket. Please try again.';
+        this.errorMessage = 'Failed to submit ticket to local server.';
+        this.isSubmitting = false;
       }
     });
   }

@@ -1,0 +1,17 @@
+/* Smooth Fade-In Animations */
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 300ms; }
+.delay-300 { animation-delay: 500ms; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

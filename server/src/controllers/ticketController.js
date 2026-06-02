@@ -14,13 +14,23 @@ const generateTicketId = async () => {
 // 1. Create a new ticket (Customer Portal)
 export const createTicket = async (req, res) => {
   try {
-    const { category, subject, description, plantReference, attachments } = req.body;
+    const { category, subject, description, plantReference } = req.body;
 
     if (!category || !subject || !description) {
       return res.status(400).json({ message: 'Please provide all required fields.' });
     }
 
     const ticketId = await generateTicketId();
+
+    // --- Map uploaded files to local URLs ---
+    const attachmentUrls = [];
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        // Build an accessible web URL pointing to your local Node server
+        const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${file.filename}`;
+        attachmentUrls.push(fileUrl);
+      });
+    }
 
     const ticket = await Ticket.create({
       ticketId,
@@ -29,11 +39,11 @@ export const createTicket = async (req, res) => {
       subject,
       description,
       plantReference,
-      attachments: attachments || []
+      attachments: attachmentUrls // Save local server paths to MongoDB!
     });
 
     res.status(201).json({
-      message: 'Ticket created successfully',
+      message: 'Ticket created successfully with local attachments',
       ticket
     });
   } catch (error) {

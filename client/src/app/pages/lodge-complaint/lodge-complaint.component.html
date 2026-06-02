@@ -51,8 +51,38 @@
           <button type="button" routerLink="/dashboard" class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
             Cancel
           </button>
-          <button type="submit" [disabled]="isLoading" class="px-6 py-3 bg-brand-dark text-white font-bold rounded-lg hover:bg-[#13442a] transition-all shadow-md disabled:opacity-70">
-            {{ isLoading ? 'Submitting...' : 'Submit Ticket' }}
+          <div class="flex-1">
+          <span class="block text-sm font-medium text-gray-700 mb-2">Attachments (Optional)</span>
+          
+          <label for="file-upload" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-brand-accent hover:bg-gray-50 transition-all cursor-pointer bg-white group">
+            
+            <div class="space-y-1 text-center">
+              <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-brand-accent transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              
+              <div class="text-sm text-gray-600">
+                <span class="font-medium text-brand-primary group-hover:text-brand-dark">Click to upload a file</span>
+                <input id="file-upload" name="file-upload" type="file" multiple class="sr-only" (change)="onFileSelected($event)">
+              </div>
+              
+              <p class="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+            </div>
+            
+          </label>
+
+          <div *ngIf="selectedFiles.length > 0" class="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <p class="text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Selected Files:</p>
+            <ul class="text-sm text-brand-dark space-y-1">
+              <li *ngFor="let file of selectedFiles" class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                {{ file.name }}
+              </li>
+            </ul>
+          </div>
+        </div>
+          <button type="submit" [disabled]="isSubmitting" class="px-6 py-3 bg-brand-dark text-white font-bold rounded-lg hover:bg-[#13442a] transition-all shadow-md disabled:opacity-70">
+            {{ isSubmitting ? 'Submitting...' : 'Submit Ticket' }}
           </button>
         </div>
       </form>
