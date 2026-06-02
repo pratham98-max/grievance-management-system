@@ -1,61 +1,58 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule],
+  imports: [CommonModule, RouterLink, FormsModule], // FormsModule is required for [(ngModel)]
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  // Form properties bound to the HTML via ngModel
   email = '';
   password = '';
-  errorMessage = '';
   isLoading = false;
+  errorMessage = '';
 
+  // Injections using modern Angular context
   private authService = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
- onLogin() {
-    this.errorMessage = '';
+  onSubmit() {
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Please enter both email and password.';
+      return;
+    }
+
     this.isLoading = true;
+    this.errorMessage = '';
 
-    // 1. Log into Firebase securely
     this.authService.login(this.email, this.password).subscribe({
-      next: () => {
-        
-        // 2. Firebase success! Now ask Node.js for their official Role
-        this.authService.getUserProfile().subscribe({
-          next: (userDb) => {
-            this.isLoading = false;
-            
-            // 3. SMART ROUTING based on the database!
-          // SMART ROUTING based on the database!
-            if (userDb.role === 'ADMIN') {
-              this.router.navigate(['/admin/dashboard']);
-            } 
-            else if (userDb.role === 'EMPLOYEE') {
-              this.router.navigate(['/employee/dashboard']); // <-- Fixed!
-            } 
-            else {
-              this.router.navigate(['/dashboard']); // Default Customer
-            }
-          },
-          error: (profileErr) => {
-            this.isLoading = false;
-            this.errorMessage = 'Failed to load user profile.';
-          }
-        });
-
-      },
-      error: (err) => {
+      // Replace the routing section inside your onSubmit() next block with this:
+next: (response: any) => {
+  this.isLoading = false;
+  
+  const role = response?.user?.role || response?.role;
+  if (role === 'ADMIN') {
+    this.router.navigate(['/admin-dashboard']);
+  } else if (role === 'EMPLOYEE') {
+    this.router.navigate(['/employee-dashboard']);
+  } else {
+    this.router.navigate(['/customer-dashboard']); // <-- Fixed slash to hyphen!
+  }
+  
+  this.cdr.detectChanges();
+},
+      error: (err: any) => {
+        console.error('Login error:', err);
+        this.errorMessage = err.error?.message || 'Invalid email or password. Please try again.';
         this.isLoading = false;
-        console.error(err);
-        this.errorMessage = 'Invalid email or password. Please try again.';
+        this.cdr.detectChanges();
       }
     });
   }

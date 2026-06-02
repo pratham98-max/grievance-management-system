@@ -1,4 +1,3 @@
-// 1. Import PLATFORM_ID and isPlatformBrowser
 import { Component, OnInit, inject, ChangeDetectorRef, PLATFORM_ID } from '@angular/core'; 
 import { isPlatformBrowser, CommonModule } from '@angular/common'; 
 import { RouterLink } from '@angular/router';
@@ -17,22 +16,18 @@ export class CustomerDashboardComponent implements OnInit {
   errorMessage = '';
 
   totalGrievances = 0;
-  pendingResolution = 0;
-  resolvedTickets = 0;
+  // Renamed these two to match the HTML exactly!
+  pendingCount = 0; 
+  resolvedCount = 0;
 
   private ticketService = inject(TicketService);
   private cdr = inject(ChangeDetectorRef);
-  
-  // 2. Inject the Platform ID to detect SSR
   private platformId = inject(PLATFORM_ID); 
 
   ngOnInit() {
-    // 3. ONLY fetch data if we are in the real browser!
     if (isPlatformBrowser(this.platformId)) {
-      // Firebase needs a split second to initialize the user state on refresh
-      setTimeout(() => {
-        this.fetchMyTickets();
-      }, 500); 
+      // Clean, synchronous execution context preserved
+      this.fetchMyTickets();
     }
   }
 
@@ -55,7 +50,8 @@ export class CustomerDashboardComponent implements OnInit {
 
   calculateStats() {
     this.totalGrievances = this.tickets.length;
-    this.pendingResolution = this.tickets.filter(t => t.status === 'PENDING' || t.status === 'IN_PROGRESS').length;
-    this.resolvedTickets = this.tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length;
+    // Updated these variables to match as well
+    this.pendingCount = this.tickets.filter(t => t.status === 'PENDING' || t.status === 'IN_PROGRESS' || t.status === 'Open').length;
+    this.resolvedCount = this.tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length;
   }
 }

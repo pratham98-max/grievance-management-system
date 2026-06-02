@@ -1,14 +1,14 @@
 import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // <-- 1. ADD THIS FOR THE CHAT INPUT
+import { FormsModule } from '@angular/forms'; 
 import { TicketService } from '../../services/ticket.service';
-import { CommentService } from '../../services/comment.service'; // <-- 2. ADD THIS
+import { CommentService } from '../../services/comment.service'; 
 
 @Component({
   selector: 'app-ticket-detail',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule], // <-- 3. ADD FormsModule HERE
+  imports: [RouterLink, CommonModule, FormsModule], 
   templateUrl: './ticket-detail.component.html',
   styleUrls: ['./ticket-detail.component.css']
 })
@@ -24,7 +24,7 @@ export class TicketDetailComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private ticketService = inject(TicketService);
-  private commentService = inject(CommentService); // <-- Inject Service
+  private commentService = inject(CommentService); 
   private platformId = inject(PLATFORM_ID);
   private cdr = inject(ChangeDetectorRef);
 
@@ -32,8 +32,9 @@ export class TicketDetailComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const ticketId = this.route.snapshot.paramMap.get('id');
       if (ticketId) {
+        // Clean execution context preserved for your HTTP Interceptors
         this.fetchTicketDetails(ticketId);
-        this.fetchComments(ticketId); // <-- Fetch chat history on load
+        this.fetchComments(ticketId); 
       }
     }
   }
@@ -46,6 +47,7 @@ export class TicketDetailComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
+        console.error('Error fetching ticket:', err);
         this.errorMessage = 'Failed to load ticket details.';
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -69,9 +71,8 @@ export class TicketDetailComponent implements OnInit {
     this.isSending = true;
     this.commentService.addComment(this.ticket.ticketId, this.newCommentText).subscribe({
       next: (newMsg) => {
-        // Push the new message into the UI instantly
         this.comments.push(newMsg);
-        this.newCommentText = ''; // Clear the input box
+        this.newCommentText = ''; 
         this.isSending = false;
         this.cdr.detectChanges();
       },

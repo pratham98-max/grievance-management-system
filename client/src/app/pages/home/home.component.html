@@ -33,14 +33,18 @@
   </header>
 
   <!-- Animated Parallax Hero Section -->
-<main class="flex-grow flex items-center justify-center mt-20 min-h-[90vh] relative px-4 sm:px-6 lg:px-8 overflow-hidden bg-gray-900">
+<!-- Animated Hero Section with Auto-Slider -->
+  <main class="flex-grow flex items-center justify-center mt-20 min-h-[90vh] relative px-4 sm:px-6 lg:px-8 overflow-hidden bg-gray-900">
     
+    <!-- BACKGROUND CAROUSEL LAYERS -->
     <div *ngFor="let bg of backgrounds; let i = index"
          class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
          [ngStyle]="{'background-image': 'linear-gradient(to bottom, rgba(0, 43, 91, 0.4), rgba(0, 0, 0, 0.7)), url(' + bg + ')'}"
-         [ngClass]="{'opacity-100 z-10': i === currentIndex, 'opacity-0 z-0': i !== currentIndex}">
+         [ngClass]="{'opacity-100 z-10': i === currentIndex, 'opacity-0 z-0': i !== currentIndex}"
+         style="background-attachment: fixed;"> <!-- Added Parallax back! -->
     </div>
 
+    <!-- FOREGROUND CONTENT -->
     <div class="max-w-5xl w-full text-center space-y-8 z-20 relative">
       
       <h1 class="text-5xl md:text-7xl font-serif text-white uppercase tracking-widest drop-shadow-2xl fade-in-up">

@@ -16,6 +16,9 @@ export class LodgeComplaintComponent {
   description = '';
   plantReference = '';
   selectedFiles: File[] = [];
+  priority: string = 'Medium';
+  systemStatus: string = '';
+  preferredContact: string = 'Email';
   
   isSubmitting = false;
   errorMessage = '';

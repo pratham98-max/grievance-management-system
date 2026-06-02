@@ -1,91 +1,179 @@
-<div class="min-h-screen bg-brand-light font-sans text-gray-800 flex flex-col">
-  <header class="bg-brand-dark text-white px-6 py-4 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <span routerLink="/dashboard" class="text-xl font-bold tracking-wide cursor-pointer hover:text-brand-accent transition-colors">← Back to Dashboard</span>
-      <span class="text-sm opacity-70">NatureTek Grievance Lodgement</span>
-    </div>
-  </header>
+<!-- The Relative container holds everything. Gray background for the bottom. -->
+<div class="min-h-screen bg-gray-100 relative font-sans pb-12">
+  
+  <!-- Massive Brand-Colored Header Background -->
+  <div class="absolute top-0 left-0 w-full h-80 bg-brand-dark rounded-b-[3rem] shadow-inner">
+    <!-- Subtle pattern overlay -->
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+  </div>
 
-  <main class="max-w-4xl w-full mx-auto px-6 py-12 flex-grow">
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-      <div class="p-8 border-b border-gray-100 bg-gray-50/50">
-        <h1 class="text-2xl font-bold text-brand-dark">File a Technical or Billing Grievance</h1>
-        <p class="text-sm text-gray-500 mt-1">Provide accurate system details so our routing algorithm can assign the right engineering team.</p>
+  <!-- Content Layer (Sits on top of the background) -->
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+    
+    <!-- Header Text (Now in White to pop against the dark background) -->
+    <div class="mb-10 text-center fade-in-up">
+      <h1 class="text-4xl font-extrabold text-white tracking-tight drop-shadow-md">Lodge a New Grievance</h1>
+      <p class="mt-3 text-brand-accent font-medium text-lg">Help us understand the issue so we can fix it faster.</p>
+    </div>
+
+    <!-- Main Form Card (Massive shadow creates the floating 3D effect) -->
+    <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden fade-in-up delay-100">
+      
+      <!-- Error Message Banner -->
+      <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-4 m-8 mb-0 rounded-r-md">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+          </div>
+          <div class="ml-3"><p class="text-sm text-red-700 font-bold">{{ errorMessage }}</p></div>
+        </div>
       </div>
 
-      <form class="p-8 space-y-6" (ngSubmit)="onSubmit()">
+      <!-- The Form -->
+      <form (ngSubmit)="onSubmit()" class="p-8 sm:p-10 space-y-8">
         
-        <div *ngIf="errorMessage" class="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
-          {{ errorMessage }}
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Issue Category *</label>
-            <select name="category" [(ngModel)]="category" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none bg-white transition-all">
-              <option value="" disabled selected>Select an infrastructure component</option>
-              <option value="Inverter Fault">Solar Inverter Fault</option>
-              <option value="Panel Damage">Panel Physical/Performance Damage</option>
-              <option value="Battery System">Energy Storage / Battery System</option>
-              <option value="Billing Discrepancy">Net Metering / Billing Discrepancy</option>
-              <option value="Other">Other Inquiry</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Solar Array ID (Optional)</label>
-            <input type="text" name="plantReference" [(ngModel)]="plantReference" placeholder="e.g., NT-ARRAY-XYZ-01" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none transition-all" />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Brief Summary / Subject *</label>
-          <input type="text" name="subject" [(ngModel)]="subject" required placeholder="e.g., Inverter blinking orange light" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none transition-all" />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Detailed Description *</label>
-          <textarea rows="5" name="description" [(ngModel)]="description" required placeholder="Describe what happened..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-accent outline-none transition-all resize-none"></textarea>
-        </div>
-
-        <div class="pt-4 border-t border-gray-100 flex justify-end gap-4">
-          <button type="button" routerLink="/dashboard" class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-            Cancel
-          </button>
-          <div class="flex-1">
-          <span class="block text-sm font-medium text-gray-700 mb-2">Attachments (Optional)</span>
+        <!-- SECTION 1: Basic Info -->
+        <div class="space-y-6">
+          <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-2">1. Categorize the Issue</h3>
           
-          <label for="file-upload" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-brand-accent hover:bg-gray-50 transition-all cursor-pointer bg-white group">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide">Category <span class="text-red-500">*</span></label>
+              <select [(ngModel)]="category" name="category" required
+                      class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent focus:bg-white transition-all appearance-none cursor-pointer">
+                <option value="" disabled selected>Select an issue category</option>
+                <option value="Inverter Fault">Inverter Fault</option>
+                <option value="Panel Damage">Panel Damage</option>
+                <option value="Wiring Issue">Wiring Issue</option>
+                <option value="Performance Drop">Performance Drop</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide">Current System Status <span class="text-red-500">*</span></label>
+              <select [(ngModel)]="systemStatus" name="systemStatus" required
+                      class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent focus:bg-white transition-all appearance-none cursor-pointer">
+                <option value="" disabled selected>How is the system behaving?</option>
+                <option value="Completely Offline">Completely Offline / No Power</option>
+                <option value="Degraded Performance">Online, but Degraded Performance</option>
+                <option value="Warning Lights">Warning Lights / Alarms Active</option>
+                <option value="Physical Damage">Physical Damage Visible</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: Priority (Stylized Buttons) -->
+        <div class="space-y-4">
+          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide">Assess Priority Level <span class="text-red-500">*</span></label>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             
+            <!-- Low -->
+            <label [ngClass]="priority === 'Low' ? 'border-brand-accent bg-brand-accent/5 ring-1 ring-brand-accent' : 'border-gray-200 bg-white hover:bg-gray-50'"
+                   class="border rounded-xl p-4 text-center cursor-pointer transition-all">
+              <input type="radio" name="priority" value="Low" [(ngModel)]="priority" class="sr-only">
+              <span class="block text-sm font-bold" [ngClass]="priority === 'Low' ? 'text-brand-dark' : 'text-gray-500'">Low</span>
+              <span class="block text-xs text-gray-400 mt-1">Minor issue</span>
+            </label>
+
+            <!-- Medium -->
+            <label [ngClass]="priority === 'Medium' ? 'border-brand-accent bg-brand-accent/5 ring-1 ring-brand-accent' : 'border-gray-200 bg-white hover:bg-gray-50'"
+                   class="border rounded-xl p-4 text-center cursor-pointer transition-all">
+              <input type="radio" name="priority" value="Medium" [(ngModel)]="priority" class="sr-only">
+              <span class="block text-sm font-bold" [ngClass]="priority === 'Medium' ? 'text-brand-dark' : 'text-gray-500'">Medium</span>
+              <span class="block text-xs text-gray-400 mt-1">Needs attention</span>
+            </label>
+
+            <!-- High -->
+            <label [ngClass]="priority === 'High' ? 'border-amber-500 bg-amber-50 ring-1 ring-amber-500' : 'border-gray-200 bg-white hover:bg-gray-50'"
+                   class="border rounded-xl p-4 text-center cursor-pointer transition-all">
+              <input type="radio" name="priority" value="High" [(ngModel)]="priority" class="sr-only">
+              <span class="block text-sm font-bold" [ngClass]="priority === 'High' ? 'text-amber-600' : 'text-gray-500'">High</span>
+              <span class="block text-xs text-gray-400 mt-1">Severe impact</span>
+            </label>
+
+            <!-- Critical -->
+            <label [ngClass]="priority === 'Critical' ? 'border-red-500 bg-red-50 ring-1 ring-red-500' : 'border-gray-200 bg-white hover:bg-gray-50'"
+                   class="border rounded-xl p-4 text-center cursor-pointer transition-all">
+              <input type="radio" name="priority" value="Critical" [(ngModel)]="priority" class="sr-only">
+              <span class="block text-sm font-bold" [ngClass]="priority === 'Critical' ? 'text-red-600' : 'text-gray-500'">Critical</span>
+              <span class="block text-xs text-gray-400 mt-1">Total failure / Safety</span>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- SECTION 3: Details -->
+        <div class="space-y-6">
+          <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-2">2. Describe the Problem</h3>
+          
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide">Subject <span class="text-red-500">*</span></label>
+            <input type="text" [(ngModel)]="subject" name="subject" required placeholder="e.g., Inverter A showing Error Code 404"
+                   class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent focus:bg-white transition-all">
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide">Detailed Description <span class="text-red-500">*</span></label>
+            <textarea [(ngModel)]="description" name="description" required rows="4" placeholder="Please describe when the issue started and any troubleshooting steps you have taken..."
+                      class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent focus:bg-white transition-all resize-y"></textarea>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Attachments -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-2">3. Supporting Evidence</h3>
+          <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:bg-gray-50 transition-colors bg-white">
             <div class="space-y-1 text-center">
-              <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-brand-accent transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+              <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-              
-              <div class="text-sm text-gray-600">
-                <span class="font-medium text-brand-primary group-hover:text-brand-dark">Click to upload a file</span>
-                <input id="file-upload" name="file-upload" type="file" multiple class="sr-only" (change)="onFileSelected($event)">
+              <div class="flex text-sm text-gray-600 justify-center">
+                <label for="file-upload" class="relative cursor-pointer bg-transparent rounded-md font-bold text-brand-accent hover:text-brand-dark focus-within:outline-none">
+                  <span>Upload images or logs</span>
+                  <input id="file-upload" type="file" multiple (change)="onFileSelected($event)" class="sr-only">
+                </label>
               </div>
-              
               <p class="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+              
+              <div *ngIf="selectedFiles.length > 0" class="mt-4 pt-4 border-t border-gray-200 inline-block px-8">
+                <p class="text-sm font-bold text-brand-accent">{{ selectedFiles.length }} file(s) attached and ready.</p>
+              </div>
             </div>
-            
-          </label>
-
-          <div *ngIf="selectedFiles.length > 0" class="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-            <p class="text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Selected Files:</p>
-            <ul class="text-sm text-brand-dark space-y-1">
-              <li *ngFor="let file of selectedFiles" class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                {{ file.name }}
-              </li>
-            </ul>
           </div>
         </div>
-          <button type="submit" [disabled]="isSubmitting" class="px-6 py-3 bg-brand-dark text-white font-bold rounded-lg hover:bg-[#13442a] transition-all shadow-md disabled:opacity-70">
-            {{ isSubmitting ? 'Submitting...' : 'Submit Ticket' }}
-          </button>
+
+        <!-- Submit Footer -->
+        <div class="pt-8 mt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          
+          <!-- Contact Preference -->
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <span class="text-sm font-bold text-gray-500">Reply via:</span>
+            <select [(ngModel)]="preferredContact" name="preferredContact" class="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand-accent cursor-pointer">
+              <option value="Email">Email</option>
+              <option value="Portal">Portal Chat</option>
+              <option value="Phone">Phone Call</option>
+            </select>
+          </div>
+          
+          <div class="flex gap-4 w-full sm:w-auto">
+           <button routerLink="/customer-dashboard" type="button" class="w-full sm:w-auto px-6 py-3 text-sm font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
+  Cancel
+</button>
+            
+            <button type="submit" [disabled]="isSubmitting"
+                    class="w-full sm:w-auto px-8 py-3 bg-brand-dark hover:bg-brand-accent text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none">
+              <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ isSubmitting ? 'Submitting...' : 'Submit Grievance' }}</span>
+            </button>
+          </div>
         </div>
+
       </form>
     </div>
-  </main>
+  </div>
 </div>
