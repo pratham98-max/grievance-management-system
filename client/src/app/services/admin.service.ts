@@ -39,4 +39,22 @@ export class AdminService {
       switchMap(headers => this.http.put(`${environment.apiUrl}/tickets/admin/assign/${ticketId}`, updateData, { headers }))
     );
   }
+  // Add to AdminService
+getCategories(): Observable<any[]> {
+  return this.getHeaders().pipe(
+    switchMap(headers => this.http.get<any[]>(`${environment.apiUrl}/categories`, { headers }))
+  );
+}
+
+addCategory(data: any): Observable<any> {
+  return this.getHeaders().pipe(
+    switchMap(headers => this.http.post(`${environment.apiUrl}/categories`, data, { headers }))
+  );
+}
+
+toggleCategoryStatus(id: string, status: string): Observable<any> {
+  return this.getHeaders().pipe(
+    switchMap(headers => this.http.patch(`${environment.apiUrl}/categories/${id}`, { status }, { headers }))
+  );
+}
 }

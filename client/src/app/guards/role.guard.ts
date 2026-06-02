@@ -10,26 +10,30 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const allowedRoles = route.data['roles'] as Array<string>;
 
   return authService.getUserProfile().pipe(
-   map(userDb => {
-      if (allowedRoles.includes(userDb.role)) {
-        return true; 
+    map(userDb => {
+      // 1. Check if the user has access
+      if (userDb && userDb.role && allowedRoles.includes(userDb.role)) {
+        return true;
       }
+
+      // 2. Access Denied: User is logged in but doesn't have the right role
+      console.warn("Unauthorized access attempt. Redirecting based on role.");
       
-      // Fix the paths to match app.routes.ts exactly!
-      if (userDb.role === 'ADMIN') {
-        router.navigate(['/admin/dashboard']);
-      } else if (userDb.role === 'EMPLOYEE') {
-        router.navigate(['/employee/dashboard']); // <-- Fixed!
+      // Determine redirection based on the role they DO have
+      if (userDb?.role === 'ADMIN') {
+        return router.createUrlTree(['/admin/dashboard']);
+      } else if (userDb?.role === 'EMPLOYEE') {
+        return router.createUrlTree(['/employee/dashboard']);
       } else {
-        router.navigate(['/dashboard']);
+        return router.createUrlTree(['/dashboard']);
       }
-      
-      return false;
     }),
     catchError((err) => {
-      console.error("Role Guard Error:", err);
-      router.navigate(['/login']);
-      return of(false);
+      console.error("Role Guard Auth Error (likely not logged in):", err);
+      
+      // If the error is a 401/403, it means they are not authorized/logged in
+      // Redirect to login
+      return of(router.createUrlTree(['/login']));
     })
   );
 };

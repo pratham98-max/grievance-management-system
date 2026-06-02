@@ -4,7 +4,8 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  user // <-- ADD THIS IMPORT
 } from '@angular/fire/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -17,6 +18,7 @@ export class AuthService {
   private auth = inject(Auth);
   private http = inject(HttpClient);
   private ngZone = inject(NgZone); // <-- 1. Inject Angular's Zone Fixer
+  user$ = user(this.auth);
 
   register(email: string, password: string, name: string, role: string): Observable<any> {
     return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
